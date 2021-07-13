@@ -6,6 +6,9 @@ class Menu extends PIXI.Container {
     }
 
     setup(){
+        this.alpha = 0;
+        createjs.Tween.get( this ).to( { alpha: 1 }, 250 );
+
         const defaultBG = PIXI.Texture.from('assets/img/main_menu.png');
         const defaultBG_sprite = new PIXI.Sprite(defaultBG);
         defaultBG_sprite.width = 375;
@@ -21,11 +24,11 @@ class Menu extends PIXI.Container {
         var game = this;
 
         //Start Btn
-        const luckiest = new PIXI.TextStyle({
+        const defaultFont = new PIXI.TextStyle({
             fontFamily: 'Comic Sans MS',
             fontSize: 30,
         });
-        let start_btn = new PIXI.Text('Start', luckiest);
+        let start_btn = new PIXI.Text('Start', defaultFont);
         start_btn.style.fill = '#2b372b';
         start_btn.anchor.set(0.5);
         start_btn.position.x = 375/2
@@ -37,7 +40,7 @@ class Menu extends PIXI.Container {
         .on('pointerup', showGame)
 
         //Instructions Btn
-        let inst_btn = new PIXI.Text('Instructions', luckiest);
+        let inst_btn = new PIXI.Text('Instructions', defaultFont);
         inst_btn.anchor.set(0.5);
         inst_btn.position.x = 375/2
         inst_btn.position.y = 667/1.5
@@ -48,7 +51,7 @@ class Menu extends PIXI.Container {
         .on('pointerup', showInstructions)
 
         //Credits Btn
-        let credits_btn = new PIXI.Text('Credits', luckiest);
+        let credits_btn = new PIXI.Text('Credits', defaultFont);
         credits_btn.anchor.set(0.5);
         credits_btn.position.x = 375/2
         credits_btn.position.y = 667/1.33

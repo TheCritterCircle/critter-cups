@@ -1,5 +1,3 @@
-var debug = true;
-
 let app = new PIXI.Application({ 
     width: 375,
     height: 667,
