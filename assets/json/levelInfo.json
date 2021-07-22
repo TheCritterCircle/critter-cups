@@ -1,9 +1,14 @@
 {
     "levels": [
         {
-            "cups_src": "",
-            "speed": 100,
-            "turns": 3
+            "cups_src": "assets/img/cup_000",
+            "speed": 1000,
+            "max_turns": 3
+        },
+        {
+            "cups_src": "assets/img/cup_000",
+            "speed": 950,
+            "max_turns": 6
         }
     ]
 }

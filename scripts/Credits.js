@@ -7,11 +7,8 @@ class Credits extends PIXI.Container {
 
     setup(){
         const defaultBG = PIXI.Texture.from('assets/img/background.png');
-        const defaultBG_sprite = new PIXI.Sprite(defaultBG);
-        defaultBG_sprite.width = 375;
-        defaultBG_sprite.height = 667;
+        const defaultBG_sprite = new SpriteTexture(this, defaultBG, 0, 0, 375, 667, 0);
 
-        this.addChild(defaultBG_sprite);
         this.setupButtons();
         app.stage.addChild(this);
         console.log("[SHOW]: Credits")
@@ -22,14 +19,7 @@ class Credits extends PIXI.Container {
 
         //Close Btn
         const closeBtn = PIXI.Texture.from('assets/img/close_btn.png');
-        const closeBtn_sprite = new PIXI.Sprite(closeBtn);
-        this.addChild(closeBtn_sprite);
-
-        closeBtn_sprite.width = 40;
-        closeBtn_sprite.height = 40;
-        closeBtn_sprite.anchor.set(0.5);
-        closeBtn_sprite.position.x = 375/1.06
-        closeBtn_sprite.position.y = 667/25
+        const closeBtn_sprite = new SpriteTexture(this, closeBtn, 375/1.06, 667/25, 40, 40, 0.5)
 
         closeBtn_sprite.interactive = true;
         closeBtn_sprite.buttonMode = true;

@@ -6,26 +6,11 @@ class Game extends PIXI.Container {
     }
 
     setup(){
-        this.startGame();
+        const defaultBG = PIXI.Texture.from('assets/img/background.png');
+        const defaultBG_sprite = new SpriteTexture(this, defaultBG, 0, 0, 375, 667, 0);
+
+        this.setupGame();
         this.setupButtons();
-        /*const defaultFont = new PIXI.TextStyle({
-            fontFamily: 'Comic Sans MS',
-            fontSize: 30,
-        });
-
-        //Star Btn
-        let start_btn = new PIXI.Text('Start', defaultFont);
-        start_btn.style.fill = '#2b372b';
-        start_btn.anchor.set(0.5);
-        start_btn.position.x = 375/2
-        start_btn.position.y = 667/2
-
-        start_btn.interactive = true;
-        start_btn.buttonMode = true;
-        start_btn
-        .on('pointerup', this.startGame)
-
-        this.addChild(start_btn);*/
         app.stage.addChild(this);
     }
 
@@ -34,14 +19,7 @@ class Game extends PIXI.Container {
 
         //Close Btn
         const closeBtn = PIXI.Texture.from('assets/img/close_btn.png');
-        const closeBtn_sprite = new PIXI.Sprite(closeBtn);
-        this.addChild(closeBtn_sprite);
-
-        closeBtn_sprite.width = 40;
-        closeBtn_sprite.height = 40;
-        closeBtn_sprite.anchor.set(0.5);
-        closeBtn_sprite.position.x = 375/1.06
-        closeBtn_sprite.position.y = 667/25
+        const closeBtn_sprite = new SpriteTexture(this, closeBtn, 375/1.06, 667/25, 40, 40, 0.5)
 
         closeBtn_sprite.interactive = true;
         closeBtn_sprite.buttonMode = true;
@@ -55,43 +33,61 @@ class Game extends PIXI.Container {
         }
     }
 
-    startGame(){
+    setupGame(){
 
         var LEVEL = 0;
         var MAX_TURNS = 4;
         var TURNS = 0;
         var SPEED = 500;
+        var COINS = 0;
 
-        const cup0 = PIXI.Texture.from('assets/img/cup_1.png');
-        const cup0_sprite = new PIXI.Sprite(cup0);
-        cup0_sprite.anchor.set(0.5);
-        cup0_sprite.position.x = 375/4.6;
-        cup0_sprite.position.y = 667/2;
-        cup0_sprite.width = 76.5;
-        cup0_sprite.height = 57.5;
-        this.addChild(cup0_sprite);
+        //Interface
+        const coins = PIXI.Texture.from('assets/img/coin.png');
+        const coins_sprite = new SpriteTexture(this, coins, 375/12, 20, 30, 30, 0.5)
 
-        const cup1 = PIXI.Texture.from('assets/img/cup_2.png');
-        const cup1_sprite = new PIXI.Sprite(cup1);
-        cup1_sprite.anchor.set(0.5);
-        cup1_sprite.position.x = 375/2;
-        cup1_sprite.position.y = 667/2;
-        cup1_sprite.width = 76.5;
-        cup1_sprite.height = 57.5;
-        this.addChild(cup1_sprite);
+        let coins_txt = new PIXI.Text(COINS, {fontFamily : 'Ariblk', fontSize: 24, fill : 0x2b372b, align : 'center'});
+        coins_txt.anchor.set(0.5);
+        coins_txt.position.x = 375/5
+        coins_txt.position.y = 20
+        this.addChild(coins_txt);
 
-        const cup2 = PIXI.Texture.from('assets/img/cup_3.png');
-        const cup2_sprite = new PIXI.Sprite(cup2);
-        cup2_sprite.anchor.set(0.5);
-        cup2_sprite.position.x = 375/1.3;
-        cup2_sprite.position.y = 667/2;
-        cup2_sprite.width = 76.5;
-        cup2_sprite.height = 57.5;
-        this.addChild(cup2_sprite);
+        let level_txt = new PIXI.Text('Level: ' + LEVEL, {fontFamily : 'Ariblk', fontSize: 24, fill : 0x2b372b, align : 'center'});
+        level_txt.anchor.set(0.5);
+        level_txt.position.x = 375/6
+        level_txt.position.y = 50
+        this.addChild(level_txt);
 
-        shuffle();
+        //Ball Texture
+        const ball = PIXI.Texture.from('assets/img/coin.png');
+        const ball_sprite = new SpriteTexture(this, ball, -10, -10, 40, 40, 0.5);
+
+        //Cups Texture
+        const cup0 = PIXI.Texture.from('assets/img/cup_000.png');
+        const cup0_sprite = new SpriteTexture(this, cup0, 375/4.6, 667/2, 76.5, 57.5, 0.5)
+
+        const cup1 = PIXI.Texture.from('assets/img/cup_000.png');
+        const cup1_sprite = new SpriteTexture(this, cup1, 375/2, 667/2, 76.5, 57.5, 0.5)
+
+        const cup2 = PIXI.Texture.from('assets/img/cup_000.png');
+        const cup2_sprite = new SpriteTexture(this, cup2, 375/1.3, 667/2, 76.5, 57.5, 0.5)
+
+        //Ball Location
+        var itemArray = [cup0_sprite, cup1_sprite, cup2_sprite]
+        var randomSprite = itemArray[Math.floor(Math.random()*itemArray.length)];
+
+        moveBall();
+        function moveBall(){
+            ball_sprite.position.x = randomSprite.position.x -5;
+            ball_sprite.position.y = randomSprite.position.y;
+        }
+
+        startGame();
+        function startGame(){
+            new SpriteAnimations(randomSprite, shuffle)
+        }
+
         function shuffle(){
-            var itemArray = [cup0_sprite, cup1_sprite, cup2_sprite]
+            ball_sprite.alpha = 0;
             var item1 = itemArray[Math.floor(Math.random()*itemArray.length)];
 
             var fixedItemArray = itemArray.filter(item => item !== item1)
@@ -112,25 +108,76 @@ class Game extends PIXI.Container {
         }
 
         function done(){
-            var itemArray = [cup0_sprite, cup1_sprite, cup2_sprite]
-
+            ball_sprite.alpha = 1;
+            moveBall()
+            
             itemArray.forEach(async function(sprite) {
                 sprite.interactive = true;
                 sprite.buttonMode = true;
-                sprite.mouseover = function(mouseData) {
+
+                /*sprite.mouseover = function(mouseData) {
                     this.tint = 0xFFF943;
                 }
+
                 sprite.mouseout = function(mouseData) {
                     this.tint = 0xFFFFFF;
-                }
+                }*/
 
                 sprite.mouseup = function(mouseData) {
-                    if(sprite === cup0_sprite){
-                        console.log("Win win win")
-                    }
-                }
-              })
+                    //this.tint = 0xFFFFFF;
+                    new SpriteAnimations(sprite, check)
 
+                    function check(){
+                        if(sprite === randomSprite){
+                            winLevel()
+                        } else {
+                            loseLevel()
+                        }
+                    }
+                    
+                }
+            })
+
+            function winLevel(){
+                //Win anim
+                console.log("Win win win");
+                nextLevel();
+            }
+
+            function loseLevel(){
+                //Lose anim
+                console.log("Lose :(");
+                repeatLevel();
+            }
+        }
+
+        function nextLevel(){
+            LEVEL = LEVEL+1;
+            COINS = COINS+10;
+            MAX_TURNS = MAX_TURNS+3;
+            SPEED = SPEED-15;
+            updateText(COINS, LEVEL);
+
+            cup0_sprite.interactive = false;
+            cup1_sprite.interactive = false;
+            cup2_sprite.interactive = false;
+
+            console.log("Level: " + LEVEL + " Coins: " + COINS + " Speed: " + SPEED)
+            shuffle();
+        }
+
+        function repeatLevel(){
+            cup0_sprite.interactive = false;
+            cup1_sprite.interactive = false;
+            cup2_sprite.interactive = false;
+
+            console.log("Level: " + LEVEL + " Coins: " + COINS + " Speed: " + SPEED)
+            startGame();
+        }
+
+        function updateText(coins, level){
+            coins_txt.text = coins;
+            level_txt.text = 'Level: ' + level;
         }
         
     }

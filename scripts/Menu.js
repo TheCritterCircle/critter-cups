@@ -10,11 +10,8 @@ class Menu extends PIXI.Container {
         createjs.Tween.get( this ).to( { alpha: 1 }, 250 );
 
         const defaultBG = PIXI.Texture.from('assets/img/main_menu.png');
-        const defaultBG_sprite = new PIXI.Sprite(defaultBG);
-        defaultBG_sprite.width = 375;
-        defaultBG_sprite.height = 667;
+        const defaultBG_sprite = new SpriteTexture(this, defaultBG, 0, 0, 375, 667, 0);
 
-        this.addChild(defaultBG_sprite);
         this.setupButtons();
         app.stage.addChild(this);
         console.log("[SHOW]: Menu");
@@ -25,10 +22,10 @@ class Menu extends PIXI.Container {
 
         //Start Btn
         const defaultFont = new PIXI.TextStyle({
-            fontFamily: 'Comic Sans MS',
-            fontSize: 30,
+            fontFamily: 'Ariblk',
+            fontSize: 25,
         });
-        let start_btn = new PIXI.Text('Start', defaultFont);
+        let start_btn = new PIXI.Text('START', defaultFont);
         start_btn.style.fill = '#2b372b';
         start_btn.anchor.set(0.5);
         start_btn.position.x = 375/2
@@ -40,7 +37,7 @@ class Menu extends PIXI.Container {
         .on('pointerup', showGame)
 
         //Instructions Btn
-        let inst_btn = new PIXI.Text('Instructions', defaultFont);
+        let inst_btn = new PIXI.Text('INSTRUCTIONS', defaultFont);
         inst_btn.anchor.set(0.5);
         inst_btn.position.x = 375/2
         inst_btn.position.y = 667/1.5
@@ -51,7 +48,7 @@ class Menu extends PIXI.Container {
         .on('pointerup', showInstructions)
 
         //Credits Btn
-        let credits_btn = new PIXI.Text('Credits', defaultFont);
+        let credits_btn = new PIXI.Text('CREDITS', defaultFont);
         credits_btn.anchor.set(0.5);
         credits_btn.position.x = 375/2
         credits_btn.position.y = 667/1.33
@@ -67,17 +64,17 @@ class Menu extends PIXI.Container {
 
         //Change Scene Functions
         function showInstructions(){
-            var instructions = new Instructions();
+            new Instructions();
             game.hide();
         }
 
         function showCredits(){
-            var instructions = new Credits();
+            new Credits();
             game.hide();
         }
 
         function showGame(){
-            var instructions = new Game();
+            new Game();
             game.hide();
         }
     }
