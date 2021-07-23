@@ -86,6 +86,22 @@ class Game extends PIXI.Container {
             new SpriteAnimations(randomSprite, shuffle)
         }
 
+        function enableCups(){
+            cup0_sprite.interactive = true;
+            cup1_sprite.interactive = true;
+            cup2_sprite.interactive = true;
+        }
+
+        function disableCups(){
+            cup0_sprite.interactive = false;
+            cup1_sprite.interactive = false;
+            cup2_sprite.interactive = false;
+
+            cup0_sprite.tint = 0xFFFFFF;
+            cup1_sprite.tint = 0xFFFFFF;
+            cup2_sprite.tint = 0xFFFFFF;
+        }
+
         function shuffle(){
             ball_sprite.alpha = 0;
             var item1 = itemArray[Math.floor(Math.random()*itemArray.length)];
@@ -109,22 +125,26 @@ class Game extends PIXI.Container {
 
         function done(){
             ball_sprite.alpha = 1;
-            moveBall()
+            moveBall();
+            enableCups();
             
             itemArray.forEach(async function(sprite) {
-                sprite.interactive = true;
                 sprite.buttonMode = true;
 
-                /*sprite.mouseover = function(mouseData) {
+                sprite.pointerover = function(mouseData) {
                     this.tint = 0xFFF943;
                 }
 
-                sprite.mouseout = function(mouseData) {
+                sprite.pointerout = function(mouseData) {
                     this.tint = 0xFFFFFF;
-                }*/
+                }
 
-                sprite.mouseup = function(mouseData) {
-                    //this.tint = 0xFFFFFF;
+                sprite.pointerdown = function(mouseData) {
+                    this.tint = 0xFFF943;
+                }
+
+                sprite.pointerup = function(mouseData) {
+                    disableCups();
                     new SpriteAnimations(sprite, check)
 
                     function check(){
@@ -136,6 +156,7 @@ class Game extends PIXI.Container {
                     }
                     
                 }
+
             })
 
             function winLevel(){
@@ -158,19 +179,11 @@ class Game extends PIXI.Container {
             SPEED = SPEED-15;
             updateText(COINS, LEVEL);
 
-            cup0_sprite.interactive = false;
-            cup1_sprite.interactive = false;
-            cup2_sprite.interactive = false;
-
             console.log("Level: " + LEVEL + " Coins: " + COINS + " Speed: " + SPEED)
             shuffle();
         }
 
         function repeatLevel(){
-            cup0_sprite.interactive = false;
-            cup1_sprite.interactive = false;
-            cup2_sprite.interactive = false;
-
             console.log("Level: " + LEVEL + " Coins: " + COINS + " Speed: " + SPEED)
             startGame();
         }
